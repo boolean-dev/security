@@ -25,6 +25,11 @@ public class SecurityController {
 
     }
 
+    @GetMapping("/")
+    public String toIndex() {
+        return "index";
+    }
+
     @GetMapping("/index")
     public String index() {
         return "index";
