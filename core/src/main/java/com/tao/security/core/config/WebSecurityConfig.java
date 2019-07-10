@@ -1,5 +1,7 @@
 package com.tao.security.core.config;
 
+import com.tao.security.core.properties.SecurityProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,6 +19,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private SecurityProperties securityProperties;
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -26,8 +31,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.formLogin()
+                .loginPage(securityProperties.getBrowser().getLoginPage())
                 .and()
                 .authorizeRequests()
+                .antMatchers(securityProperties.getBrowser().getLoginPage())
+                .permitAll()
                 .anyRequest()
                 .authenticated();
     }

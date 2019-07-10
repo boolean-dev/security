@@ -29,4 +29,9 @@ public class SecurityController {
     public String index() {
         return "index";
     }
+
+    @GetMapping("/user/signIn")
+    public String signId() {
+        return "signIn";
+    }
 }
