@@ -1,5 +1,8 @@
 package com.tao.security.core.controller;
 
+import com.tao.security.core.result.Result;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,5 +41,11 @@ public class SecurityController {
     @GetMapping("/user/signIn")
     public String signId() {
         return "signIn";
+    }
+
+    @GetMapping("/user/me")
+    @ResponseBody
+    public Result me(@AuthenticationPrincipal UserDetails user) {
+        return Result.successMsg(user);
     }
 }
