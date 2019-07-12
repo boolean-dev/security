@@ -13,7 +13,6 @@ import java.util.Date;
  * @Author yanjiantao
  * @Date 2019/7/11 17:17
  **/
-
 @Data
 public class ImageCode {
     /**

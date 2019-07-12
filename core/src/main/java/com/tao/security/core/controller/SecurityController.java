@@ -3,13 +3,15 @@ package com.tao.security.core.controller;
 import com.tao.security.core.result.Result;
 import com.tao.security.core.utils.ImageCodeUtils;
 import com.tao.security.core.validate.image.ImageCode;
+import com.tao.security.core.validate.sms.SmsCode;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.social.connect.web.HttpSessionSessionStrategy;
 import org.springframework.social.connect.web.SessionStrategy;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.ServletWebRequest;
 
 import javax.imageio.ImageIO;
@@ -25,10 +27,13 @@ import java.util.Map;
  * @Author yanjiantao
  * @Date 2019/7/8 10:18
  **/
+@Slf4j
 @Controller
 public class SecurityController {
 
     public static final String SESSION_KEY = "SESSION_KEY_IMAGE_CODE";
+
+    public static final String SESSION_SMS_KEY = "SESSION_KEY_SMS_CODE";
 
     private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
 
@@ -70,5 +75,17 @@ public class SecurityController {
         ImageCode imageCode = ImageCodeUtils.generate(webRequest);
         sessionStrategy.setAttribute(webRequest, SESSION_KEY, imageCode);
         ImageIO.write(imageCode.getImage(), "JPEG", response.getOutputStream());
+    }
+
+    @GetMapping("/user/login/code/sms")
+    @ResponseBody
+    public void codeSms(String phone, HttpServletRequest request) throws IOException {
+
+        ServletWebRequest webRequest = new ServletWebRequest(request);
+
+        String code = RandomStringUtils.randomNumeric(4);
+        SmsCode smsCode = new SmsCode(phone, code, 30);
+        log.info("发送短信，phone={},code={}", phone, code);
+        sessionStrategy.setAttribute(webRequest, SESSION_SMS_KEY, smsCode);
     }
 }
