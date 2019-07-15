@@ -36,13 +36,13 @@
     <table>
         <tr>
             <td>手机号:</td>
-            <td><input type="text" name="mobile" value="1857911****"></td>
+            <td><input type="text" name="phone" value="1857911****"></td>
         </tr>
         <tr>
             <td>短信验证码:</td>
             <td>
                 <input type="text" name="smsCode">
-                <a href="/user/login/code/sms?mobile=1857911****">发送验证码</a>
+                <a href="/user/login/code/sms?phone=1857911****">发送验证码</a>
             </td>
         </tr>
         <tr>

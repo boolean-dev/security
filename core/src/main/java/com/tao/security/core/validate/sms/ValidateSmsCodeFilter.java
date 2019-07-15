@@ -39,22 +39,22 @@ import static com.tao.security.core.controller.SecurityController.SESSION_SMS_KE
 public class ValidateSmsCodeFilter extends AbstractAuthenticationProcessingFilter {
 
     // 验证失败handler
-    private AuthenticationFailureHandler authenticationFailureHandler;
+//    private AuthenticationFailureHandler authenticationFailureHandler;
 
     // session
-    private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
+//    private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
 
     public ValidateSmsCodeFilter() {
         super(new AntPathRequestMatcher("/authentication/mobile", "POST"));
     }
 
-    protected ValidateSmsCodeFilter(String defaultFilterProcessesUrl) {
+    /*protected ValidateSmsCodeFilter(String defaultFilterProcessesUrl) {
         super(defaultFilterProcessesUrl);
     }
 
     protected ValidateSmsCodeFilter(RequestMatcher requiresAuthenticationRequestMatcher) {
         super(requiresAuthenticationRequestMatcher);
-    }
+    }*/
 
 
     @Override

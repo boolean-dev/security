@@ -19,6 +19,12 @@ public class SmsCodeAuthenticationProvider extends AbstractUserDetailsAuthentica
 
     private UserDetailsService userDetailsService;
 
+
+    @Override
+    public boolean supports(Class<?> authentication) {
+        return  SmsCodeAuthenticationToken.class.isAssignableFrom(authentication);
+    }
+
     @Override
     protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
 
@@ -31,7 +37,6 @@ public class SmsCodeAuthenticationProvider extends AbstractUserDetailsAuthentica
         if(user == null) {
             throw new InternalAuthenticationServiceException("未获取到用户信息");
         }
-
         return user;
     }
 }
