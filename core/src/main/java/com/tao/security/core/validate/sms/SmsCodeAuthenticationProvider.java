@@ -12,7 +12,7 @@ import org.springframework.social.connect.web.SessionStrategy;
 
 /**
  * @ClassName SmsCodeAuthenticationProvider
- * @Descriiption TODO
+ * @Descriiption 验证码Provider
  * @Author yanjiantao
  * @Date 2019/7/12 17:52
  **/
