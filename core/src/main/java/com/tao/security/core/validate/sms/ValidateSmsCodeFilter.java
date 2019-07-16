@@ -16,6 +16,7 @@ import org.springframework.social.connect.web.HttpSessionSessionStrategy;
 import org.springframework.social.connect.web.SessionStrategy;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.ServletRequestUtils;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -38,23 +39,12 @@ import static com.tao.security.core.controller.SecurityController.SESSION_SMS_KE
 @Slf4j
 public class ValidateSmsCodeFilter extends AbstractAuthenticationProcessingFilter {
 
-    // 验证失败handler
-//    private AuthenticationFailureHandler authenticationFailureHandler;
+    private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
 
-    // session
-//    private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
 
     public ValidateSmsCodeFilter() {
-        super(new AntPathRequestMatcher("/authentication/mobile", "POST"));
+        super(new AntPathRequestMatcher("/authentication/phone", "POST"));
     }
-
-    /*protected ValidateSmsCodeFilter(String defaultFilterProcessesUrl) {
-        super(defaultFilterProcessesUrl);
-    }
-
-    protected ValidateSmsCodeFilter(RequestMatcher requiresAuthenticationRequestMatcher) {
-        super(requiresAuthenticationRequestMatcher);
-    }*/
 
 
     @Override
@@ -63,13 +53,26 @@ public class ValidateSmsCodeFilter extends AbstractAuthenticationProcessingFilte
             throw new AuthenticationServiceException("登录请求只支持POST方法");
         }
 
-        String mobile = ServletRequestUtils.getStringParameter(request, "mobile");
+        String phone = ServletRequestUtils.getStringParameter(request, "phone");
 
-        if(StringUtils.isBlank(mobile)){
+        if(StringUtils.isBlank(phone)){
             throw new AuthenticationServiceException("手机号不能为空");
         }
 
-        String phone = ServletRequestUtils.getStringParameter(request, "smsCode");
+        String code = ServletRequestUtils.getStringParameter(request, "smsCode");
+        SmsCode smsCode = (SmsCode) sessionStrategy.getAttribute(new ServletWebRequest(request), SESSION_SMS_KEY);
+
+        if (smsCode == null) {
+            throw new AuthenticationServiceException("验证码不存在");
+        }
+
+        if (LocalDateTime.now().isAfter(smsCode.getExpireTime())) {
+            throw new AuthenticationServiceException("验证码已过期");
+        }
+
+        if (!StringUtils.equalsIgnoreCase(code, smsCode.getCode())) {
+            throw new AuthenticationServiceException("验证码错误");
+        }
 
         SmsCodeAuthenticationToken authRequest = new SmsCodeAuthenticationToken(phone);
 

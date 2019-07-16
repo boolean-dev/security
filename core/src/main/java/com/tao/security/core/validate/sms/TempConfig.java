@@ -10,6 +10,7 @@ import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
+import org.springframework.stereotype.Component;
 
 /**
  * @ClassName TempConfig
@@ -17,7 +18,7 @@ import org.springframework.security.web.authentication.preauth.AbstractPreAuthen
  * @Author yanjiantao
  * @Date 2019/7/15 17:00
  **/
-@Configuration
+@Component
 public class TempConfig  extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 
     @Autowired

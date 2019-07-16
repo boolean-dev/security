@@ -7,6 +7,8 @@ import org.springframework.security.authentication.dao.AbstractUserDetailsAuthen
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.social.connect.web.HttpSessionSessionStrategy;
+import org.springframework.social.connect.web.SessionStrategy;
 
 /**
  * @ClassName SmsCodeAuthenticationProvider
@@ -18,6 +20,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 public class SmsCodeAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
 
     private UserDetailsService userDetailsService;
+
+    private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
 
 
     @Override
@@ -37,6 +41,7 @@ public class SmsCodeAuthenticationProvider extends AbstractUserDetailsAuthentica
         if(user == null) {
             throw new InternalAuthenticationServiceException("未获取到用户信息");
         }
+
         return user;
     }
 }

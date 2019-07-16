@@ -55,29 +55,35 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+        // 图形验证码拦截器
+        ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
+        validateCodeFilter.setAuthenticationFailureHandler(myAuthenctiationFailureHandler);
+//
+        SmsCodeFilter smsCodeFilter = new SmsCodeFilter();
+        smsCodeFilter.setAuthenticationFailureHandler(myAuthenctiationFailureHandler);
 
-        http.formLogin()
+
+        http.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
+            .formLogin()
             .loginPage(securityProperties.getBrowser().getLoginPage())
             .loginProcessingUrl("/user/login")
             .successHandler(myAuthenticationSuccessHandler)
             .failureHandler(myAuthenctiationFailureHandler)
+                .and()
+                .apply(tempConfig)
             .and()
             .authorizeRequests()
-            .antMatchers(securityProperties.getBrowser().getLoginPage(), "/user/login/code/image", "/user/login/code/sms")
+            .antMatchers(securityProperties.getBrowser().getLoginPage(), "/user/login/code/image", "/user/login/code/sms","/authentication/phone")
             .permitAll()
             .anyRequest()
             .authenticated()
             .and()
             .csrf().disable();
 
-        // 图形验证码拦截器
-        ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
-        validateCodeFilter.setAuthenticationFailureHandler(myAuthenctiationFailureHandler);
 
-        SmsCodeFilter smsCodeFilter = new SmsCodeFilter();
-        smsCodeFilter.setAuthenticationFailureHandler(myAuthenctiationFailureHandler);
 
-        http.apply(tempConfig);
+//        http.apply(tempConfig);
 
         // 图形验证码拦截器执行
 
@@ -85,8 +91,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //        authenticationProvider.setUserDetailsService(userDetailsService);
 //        http.authenticationProvider(authenticationProvider)
 //                .addFilterAfter(smsCodeFilter, AbstractPreAuthenticatedProcessingFilter.class);
-        http.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(smsCodeFilter, UsernamePasswordAuthenticationFilter.class);
+//        http.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
+//                .addFilterBefore(smsCodeFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
 }
