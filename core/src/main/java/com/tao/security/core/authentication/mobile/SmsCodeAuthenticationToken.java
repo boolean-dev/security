@@ -1,4 +1,4 @@
-package com.tao.security.core.validate.sms;
+package com.tao.security.core.authentication.mobile;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;

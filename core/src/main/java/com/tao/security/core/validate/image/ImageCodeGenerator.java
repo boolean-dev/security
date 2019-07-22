@@ -1,6 +1,10 @@
-package com.tao.security.core.utils;
+package com.tao.security.core.validate.image;
 
-import com.tao.security.core.validate.image.ImageValidateCode;
+import com.tao.security.core.properties.SecurityProperties;
+import com.tao.security.core.validate.handle.ValidateCodeGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
 
 import java.awt.*;
@@ -8,16 +12,24 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 /**
- * @ClassName ImageCodeUtils
- * @Descriiption 图形验证码工具类
+ * @ClassName ImageCodeGenerator
+ * @Descriiption 图形验证码生成器
  * @Author yanjiantao
- * @Date 2019/7/11 17:21
+ * @Date 2019/7/22 17:59
  **/
-public class ImageCodeUtils {
 
-    public static ImageValidateCode generate(ServletWebRequest request) {
-        int width = 67;
-        int height = 23;
+@Component("imageCodeGenerator")
+public class ImageCodeGenerator implements ValidateCodeGenerator {
+
+    @Autowired
+    private SecurityProperties securityProperties;
+
+    @Override
+    public ImageValidateCode generate(ServletWebRequest request) {
+        int width = ServletRequestUtils.getIntParameter(request.getRequest(), "width",
+                securityProperties.getCode().getImage().getWidth());
+        int height = ServletRequestUtils.getIntParameter(request.getRequest(), "height",
+                securityProperties.getCode().getImage().getHeight());
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
         Graphics g = image.getGraphics();
@@ -37,7 +49,7 @@ public class ImageCodeUtils {
         }
 
         String sRand = "";
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < securityProperties.getCode().getImage().getLength(); i++) {
             String rand = String.valueOf(random.nextInt(10));
             sRand += rand;
             g.setColor(new Color(20 + random.nextInt(110), 20 + random.nextInt(110), 20 + random.nextInt(110)));
@@ -46,7 +58,7 @@ public class ImageCodeUtils {
 
         g.dispose();
 
-        return new ImageValidateCode(sRand, 60, image);
+        return new ImageValidateCode(sRand, securityProperties.getCode().getImage().getExpireIn(), image);
     }
 
     /**
@@ -56,7 +68,7 @@ public class ImageCodeUtils {
      * @param bc
      * @return
      */
-    private static Color getRandColor(int fc, int bc) {
+    private Color getRandColor(int fc, int bc) {
         Random random = new Random();
         if (fc > 255) {
             fc = 255;

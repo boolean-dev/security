@@ -2,6 +2,7 @@ package com.tao.security.core.security.result;
 
 import com.google.gson.Gson;
 import com.tao.security.core.properties.BrowserProperties;
+import com.tao.security.core.properties.LoginResponseType;
 import com.tao.security.core.properties.SecurityProperties;
 import com.tao.security.core.result.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -17,14 +18,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * @ClassName MyAuthenctiationFailureHandler
+ * @ClassName MyAuthenticationFailureHandler
  * @Descriiption 自定义登录失败处理器
  * @Author yanjiantao
  * @Date 2019/7/10 17:26
  **/
 @Slf4j
-@Component("myAuthenctiationFailureHandler")
-public class MyAuthenctiationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
+@Component("myAuthenticationFailureHandler")
+public class MyAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
     @Autowired
     private SecurityProperties securityProperties;
@@ -34,7 +35,7 @@ public class MyAuthenctiationFailureHandler extends SimpleUrlAuthenticationFailu
                                         HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         logger.info("登录失败...\ne={}", exception);
         Gson gson = new Gson();
-        if ("JSON".equalsIgnoreCase(securityProperties.getBrowser().getLoginType())) {
+        if (LoginResponseType.JSON.equals(securityProperties.getBrowser().getLoginType())) {
             response.setStatus(HttpStatus.OK.value());
             response.setContentType("application/json;charset=UTF-8");
             response.getWriter().write(gson.toJson(Result.errorMsg()));

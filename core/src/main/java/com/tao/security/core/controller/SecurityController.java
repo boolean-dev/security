@@ -2,8 +2,8 @@ package com.tao.security.core.controller;
 
 import com.tao.security.core.result.Result;
 import com.tao.security.core.utils.ImageCodeUtils;
-import com.tao.security.core.validate.image.ImageCode;
-import com.tao.security.core.validate.sms.SmsCode;
+import com.tao.security.core.validate.image.ImageValidateCode;
+import com.tao.security.core.validate.sms.SmsValidateCode;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -72,7 +72,7 @@ public class SecurityController {
     @ResponseBody
     public void codeImage(HttpServletRequest request, HttpServletResponse response) throws IOException {
         ServletWebRequest webRequest = new ServletWebRequest(request);
-        ImageCode imageCode = ImageCodeUtils.generate(webRequest);
+        ImageValidateCode imageCode = ImageCodeUtils.generate(webRequest);
         sessionStrategy.setAttribute(webRequest, SESSION_KEY, imageCode);
         ImageIO.write(imageCode.getImage(), "JPEG", response.getOutputStream());
     }
@@ -84,7 +84,7 @@ public class SecurityController {
         ServletWebRequest webRequest = new ServletWebRequest(request);
 
         String code = RandomStringUtils.randomNumeric(4);
-        SmsCode smsCode = new SmsCode(phone, code, 30);
+        SmsValidateCode smsCode = new SmsValidateCode(code, 30, phone);
         log.info("发送短信，phone={},code={}", phone, code);
         sessionStrategy.setAttribute(webRequest, SESSION_SMS_KEY, smsCode);
     }

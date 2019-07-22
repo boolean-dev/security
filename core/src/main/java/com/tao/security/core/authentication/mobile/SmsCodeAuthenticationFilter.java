@@ -1,7 +1,7 @@
-package com.tao.security.core.validate.sms;
+package com.tao.security.core.authentication.mobile;
 
-import com.tao.security.core.authentication.mobile.SmsCodeAuthenticationToken;
-import lombok.extern.slf4j.Slf4j;
+import com.tao.security.core.properties.SecurityConstants;
+import com.tao.security.core.validate.sms.SmsValidateCode;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
@@ -22,19 +22,18 @@ import java.time.LocalDateTime;
 import static com.tao.security.core.controller.SecurityController.SESSION_SMS_KEY;
 
 /**
- * @ClassName ValidateSmsCodeFilter
- * @Descriiption 手机验证码拦截器
+ * @ClassName SmsCodeAuthenticationFilter
+ * @Descriiption 手机验证码认证器
  * @Author yanjiantao
- * @Date 2019/7/12 16:39
+ * @Date 2019/7/22 15:02
  **/
-@Slf4j
-public class ValidateSmsCodeFilter extends AbstractAuthenticationProcessingFilter {
+public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
     private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
 
 
-    public ValidateSmsCodeFilter() {
-        super(new AntPathRequestMatcher("/authentication/phone", "POST"));
+    public SmsCodeAuthenticationFilter() {
+        super(new AntPathRequestMatcher(SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE, "POST"));
     }
 
 
@@ -71,6 +70,4 @@ public class ValidateSmsCodeFilter extends AbstractAuthenticationProcessingFilte
 
         return getAuthenticationManager().authenticate(authRequest);
     }
-
-
 }

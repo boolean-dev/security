@@ -1,8 +1,10 @@
 package com.tao.security.core.validate.image;
 
 import com.tao.security.core.exception.ValidateImageCodeException;
+import com.tao.security.core.properties.SecurityProperties;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.social.connect.web.HttpSessionSessionStrategy;
 import org.springframework.social.connect.web.SessionStrategy;
@@ -36,6 +38,12 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
     private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
 
     /**
+     * 系统配置信息
+     */
+    @Autowired
+    private SecurityProperties securityProperties;
+
+    /**
      * 验证码拦截器
      * @param request   request
      * @param response  respon
@@ -46,7 +54,7 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        if (StringUtils.equals("/user/login", request.getRequestURI()) &&
+        if (StringUtils.equals(securityProperties.getBrowser().getLoginPage(), request.getRequestURI()) &&
                 StringUtils.equalsIgnoreCase("POST", request.getMethod())) {
             try {
                 this.validate(new ServletWebRequest(request));
@@ -66,7 +74,7 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
     private void validate(ServletWebRequest servletWebRequest) throws ServletRequestBindingException {
 
         // 从session中得到imageCode
-        ImageCode imageCodeSession = (ImageCode) sessionStrategy.getAttribute(servletWebRequest, SESSION_KEY);
+        ImageValidateCode imageCodeSession = (ImageValidateCode) sessionStrategy.getAttribute(servletWebRequest, SESSION_KEY);
 
         // 从request中得到验证码
         String imageCode = ServletRequestUtils.getStringParameter(servletWebRequest.getRequest(), "imageCode");

@@ -2,6 +2,7 @@ package com.tao.security.core.security.result;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.tao.security.core.properties.LoginResponseType;
 import com.tao.security.core.properties.SecurityProperties;
 import com.tao.security.core.result.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +39,7 @@ public class MyAuthenticationSuccessHandler extends SavedRequestAwareAuthenticat
             throws ServletException, IOException {
         logger.info("登录成功...");
         Gson gson = new Gson();
-        if ("JSON".equalsIgnoreCase(securityProperties.getBrowser().getLoginType())) {
+        if (LoginResponseType.JSON.equals(securityProperties.getBrowser().getLoginType())) {
             response.setStatus(HttpStatus.OK.value());
             response.setContentType("application/json;charset=UTF-8");
             response.getWriter().write(gson.toJson(Result.successMsg(authentication)));

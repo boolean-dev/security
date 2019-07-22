@@ -1,5 +1,6 @@
 package com.tao.security.core.properties;
 
+import com.tao.security.core.validate.ValidateCode;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -10,7 +11,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @Date 2019/7/10 16:32
  **/
 @Data
-@ConfigurationProperties(prefix = "my.security")
+@ConfigurationProperties(prefix = "com.tao.security")
 public class SecurityProperties {
     BrowserProperties browser = new BrowserProperties();
+    ValidateCodeProperties code = new ValidateCodeProperties();
 }

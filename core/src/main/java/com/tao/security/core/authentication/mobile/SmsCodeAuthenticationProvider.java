@@ -1,5 +1,6 @@
-package com.tao.security.core.validate.sms;
+package com.tao.security.core.authentication.mobile;
 
+import com.tao.security.core.authentication.mobile.SmsCodeAuthenticationToken;
 import lombok.Data;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
