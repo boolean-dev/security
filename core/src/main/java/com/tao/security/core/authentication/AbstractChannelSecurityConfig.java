@@ -17,13 +17,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 public class AbstractChannelSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private SecurityProperties securityProperties;
+    protected MyAuthenticationFailureHandler failureHandler;
 
     @Autowired
-    private MyAuthenticationFailureHandler failureHandler;
-
-    @Autowired
-    private MyAuthenticationSuccessHandler successHandler;
+    protected MyAuthenticationSuccessHandler successHandler;
 
     protected void applyPasswordAuthenticationConfig(HttpSecurity http) throws Exception {
         http.formLogin()

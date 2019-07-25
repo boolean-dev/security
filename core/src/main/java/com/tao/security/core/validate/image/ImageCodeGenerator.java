@@ -21,7 +21,7 @@ import java.util.Random;
 @Component("imageCodeGenerator")
 public class ImageCodeGenerator implements ValidateCodeGenerator {
 
-    @Autowired
+//    @Autowired
     private SecurityProperties securityProperties;
 
     @Override
@@ -80,5 +80,13 @@ public class ImageCodeGenerator implements ValidateCodeGenerator {
         int g = fc + random.nextInt(bc - fc);
         int b = fc + random.nextInt(bc - fc);
         return new Color(r, g, b);
+    }
+
+    public SecurityProperties getSecurityProperties() {
+        return securityProperties;
+    }
+
+    public void setSecurityProperties(SecurityProperties securityProperties) {
+        this.securityProperties = securityProperties;
     }
 }

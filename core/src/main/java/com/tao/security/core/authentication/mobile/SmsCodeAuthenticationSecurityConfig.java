@@ -1,6 +1,5 @@
 package com.tao.security.core.authentication.mobile;
 
-import com.tao.security.core.validate.sms.ValidateSmsCodeFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
@@ -33,7 +32,7 @@ public class SmsCodeAuthenticationSecurityConfig extends SecurityConfigurerAdapt
     @Override
     public void configure(HttpSecurity http) throws Exception {
 
-        ValidateSmsCodeFilter smsCodeAuthenticationFilter = new ValidateSmsCodeFilter();
+        SmsCodeAuthenticationFilter smsCodeAuthenticationFilter = new SmsCodeAuthenticationFilter();
         smsCodeAuthenticationFilter.setAuthenticationManager(http.getSharedObject(AuthenticationManager.class));
         smsCodeAuthenticationFilter.setAuthenticationSuccessHandler(successHandler);
         smsCodeAuthenticationFilter.setAuthenticationFailureHandler(failureHandler);

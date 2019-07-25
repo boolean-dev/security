@@ -62,6 +62,11 @@ public class SecurityController {
         return "signIn";
     }
 
+    @RequestMapping("/authentication/require")
+    public String toLogin() {
+        return "signIn";
+    }
+
     @GetMapping("/user/me")
     @ResponseBody
     public Result me(@AuthenticationPrincipal UserDetails user) {
@@ -87,5 +92,10 @@ public class SecurityController {
         SmsValidateCode smsCode = new SmsValidateCode(code, 30, phone);
         log.info("发送短信，phone={},code={}", phone, code);
         sessionStrategy.setAttribute(webRequest, SESSION_SMS_KEY, smsCode);
+    }
+
+    @RequestMapping("/index")
+    public String test(){
+        return "/index";
     }
 }
