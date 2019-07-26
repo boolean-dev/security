@@ -1,5 +1,6 @@
 package com.tao.security.core.validate.handle;
 
+import com.tao.security.core.exception.ValidateCodeException;
 import com.tao.security.core.properties.SecurityConstants;
 import com.tao.security.core.properties.SecurityProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -79,7 +81,14 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
         ValidateCodeType type = this.getValidateCodeType(request);
 
         if (type != null) {
-            logger.info("校验请求（{}）中的验证码，验证码类型为{}", request.getRequestURI(), type);
+            try {
+                logger.info("校验请求（{}）中的验证码，验证码类型为{}", request.getRequestURI(), type);
+                validateCodeProcessorHandel.findValidateCodeProcessor(type)
+                        .validate(new ServletWebRequest(request, response));
+                logger.info("验证码校验通过");
+            } catch (ValidateCodeException e) {
+                failureHandler.onAuthenticationFailure(request, response, e);
+            }
 
         }
 

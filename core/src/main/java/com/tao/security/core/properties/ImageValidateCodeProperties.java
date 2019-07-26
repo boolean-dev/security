@@ -25,7 +25,7 @@ public class ImageValidateCodeProperties {
     /**
      * 验证码长度
      */
-    private int width = 60;
+    private int width = 80;
 
     /**
      * 验证码高度
