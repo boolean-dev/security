@@ -1,25 +1,20 @@
 package com.tao.security.core.authentication.mobile;
 
 import com.tao.security.core.properties.SecurityConstants;
-import com.tao.security.core.validate.sms.SmsValidateCode;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.social.connect.web.HttpSessionSessionStrategy;
-import org.springframework.social.connect.web.SessionStrategy;
+import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.ServletRequestUtils;
-import org.springframework.web.context.request.ServletWebRequest;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDateTime;
 
-import static com.tao.security.core.controller.SecurityController.SESSION_SMS_KEY;
 
 /**
  * @ClassName SmsCodeAuthenticationFilter
@@ -29,7 +24,7 @@ import static com.tao.security.core.controller.SecurityController.SESSION_SMS_KE
  **/
 public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
+    private static final String MOBILE_PARAMETER = SecurityConstants.DEFAULT_PARAMETER_NAME_MOBILE;
 
 
     public SmsCodeAuthenticationFilter() {
@@ -43,31 +38,26 @@ public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessin
             throw new AuthenticationServiceException("登录请求只支持POST方法");
         }
 
-        String phone = ServletRequestUtils.getStringParameter(request, "phone");
+        String mobile = this.getMobile(request);
 
-        if(StringUtils.isBlank(phone)){
+        if(StringUtils.isBlank(mobile)){
             throw new AuthenticationServiceException("手机号不能为空");
         }
 
-        String code = ServletRequestUtils.getStringParameter(request, "smsCode");
-        SmsValidateCode smsCode = (SmsValidateCode) sessionStrategy.getAttribute(new ServletWebRequest(request), SESSION_SMS_KEY);
 
-        if (smsCode == null) {
-            throw new AuthenticationServiceException("验证码不存在");
-        }
 
-        if (LocalDateTime.now().isAfter(smsCode.getExpireTime())) {
-            throw new AuthenticationServiceException("验证码已过期");
-        }
+        SmsCodeAuthenticationToken authRequest = new SmsCodeAuthenticationToken(mobile);
 
-        if (!StringUtils.equalsIgnoreCase(code, smsCode.getCode())) {
-            throw new AuthenticationServiceException("验证码错误");
-        }
+        this.setDetails(request, authRequest);
 
-        SmsCodeAuthenticationToken authRequest = new SmsCodeAuthenticationToken(phone);
+        return super.getAuthenticationManager().authenticate(authRequest);
+    }
 
+    private String getMobile(HttpServletRequest request) throws ServletRequestBindingException {
+        return ServletRequestUtils.getStringParameter(request, MOBILE_PARAMETER);
+    }
+
+    protected void setDetails(HttpServletRequest request, SmsCodeAuthenticationToken authRequest) {
         authRequest.setDetails(authenticationDetailsSource.buildDetails(request));
-
-        return getAuthenticationManager().authenticate(authRequest);
     }
 }

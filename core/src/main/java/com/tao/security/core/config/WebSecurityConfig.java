@@ -22,10 +22,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * @Date 2019/7/8 10:45
  **/
 @Configuration
-public class WebSecurityConfig /*extends AbstractChannelSecurityConfig*/ extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends AbstractChannelSecurityConfig {
 
-    /*@Autowired
-    private UserDetailsService userDetailsService;*/
 
     @Autowired
     private SecurityProperties securityProperties;
@@ -54,29 +52,7 @@ public class WebSecurityConfig /*extends AbstractChannelSecurityConfig*/ extends
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-
-
-        http.formLogin()
-                .loginPage("/user/signIn")
-                .loginProcessingUrl(SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_FORM)
-                .successHandler(successHandler)
-                .failureHandler(failureHandler)
-            .and()
-                .authorizeRequests()
-                .antMatchers(
-                        SecurityConstants.DEFAULT_UNAUTHENTICATION_URL,
-                        SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE,
-                        securityProperties.getBrowser().getLoginPage(),
-                        SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX,
-                        "/user/login/code/image",
-                        "/index11111",
-                        "/user/signIn")
-                .permitAll()
-                .anyRequest()
-                .authenticated();
-
-
-       /* super.applyPasswordAuthenticationConfig(http);
+        super.applyPasswordAuthenticationConfig(http);
         http.apply(validateCodeSecurityConfig)
                 .and()
             .apply(smsCodeAuthenticationSecurityConfig)
@@ -86,45 +62,12 @@ public class WebSecurityConfig /*extends AbstractChannelSecurityConfig*/ extends
                         SecurityConstants.DEFAULT_UNAUTHENTICATION_URL,
                         SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE,
                         securityProperties.getBrowser().getLoginPage(),
-                        SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX,
-                        "/user/login/code/image")
+                        SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/**")
                     .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
-            .csrf().disable();*/
-        // 图形验证码拦截器
-   /*     ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
-        validateCodeFilter.setAuthenticationFailureHandler(myAuthenctiationFailureHandler);
-//
-        SmsCodeFilter smsCodeFilter = new SmsCodeFilter();
-        smsCodeFilter.setAuthenticationFailureHandler(myAuthenctiationFailureHandler);*/
-
-
-        /*http.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
-            .addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
-                .apply(tempConfig)
-            .and()
-            .authorizeRequests()
-            .antMatchers(securityProperties.getBrowser().getLoginPage(), "/user/login/code/image", "/user/login/code/sms","/authentication/phone")
-            .permitAll()
-            .anyRequest()
-            .authenticated()
-            .and()
-            .csrf().disable();*/
-
-
-
-//        http.apply(tempConfig);
-
-        // 图形验证码拦截器执行
-
-//        SmsCodeAuthenticationProvider authenticationProvider = new SmsCodeAuthenticationProvider();
-//        authenticationProvider.setUserDetailsService(userDetailsService);
-//        http.authenticationProvider(authenticationProvider)
-//                .addFilterAfter(smsCodeFilter, AbstractPreAuthenticatedProcessingFilter.class);
-//        http.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
-//                .addFilterBefore(smsCodeFilter, UsernamePasswordAuthenticationFilter.class);
+            .csrf().disable();
     }
 
 }

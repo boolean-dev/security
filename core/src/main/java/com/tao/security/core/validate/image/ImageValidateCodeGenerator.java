@@ -12,16 +12,16 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 /**
- * @ClassName ImageCodeGenerator
+ * @ClassName ImageValidateCodeGenerator
  * @Descriiption 图形验证码生成器
  * @Author yanjiantao
  * @Date 2019/7/22 17:59
  **/
 
-@Component("imageCodeGenerator")
-public class ImageCodeGenerator implements ValidateCodeGenerator {
+@Component("imageValidateCodeGenerator")
+public class ImageValidateCodeGenerator implements ValidateCodeGenerator {
 
-//    @Autowired
+    @Autowired
     private SecurityProperties securityProperties;
 
     @Override

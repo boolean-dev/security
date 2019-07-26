@@ -1,7 +1,7 @@
 package com.tao.security.core.validate.handle;
 
 import com.tao.security.core.properties.SecurityProperties;
-import com.tao.security.core.validate.image.ImageCodeGenerator;
+import com.tao.security.core.validate.image.ImageValidateCodeGenerator;
 import com.tao.security.core.validate.sms.DefaultSmsCodeSender;
 import com.tao.security.core.validate.sms.SmsCodeSender;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class ValidateCodeBeanConfig {
     @Bean
     @ConditionalOnMissingBean(name = "imageValidateCodeGenerator")
     public ValidateCodeGenerator imageValidateCodeGenerator() {
-        ImageCodeGenerator codeGenerator = new ImageCodeGenerator();
+        ImageValidateCodeGenerator codeGenerator = new ImageValidateCodeGenerator();
         codeGenerator.setSecurityProperties(securityProperties);
         return codeGenerator;
     }

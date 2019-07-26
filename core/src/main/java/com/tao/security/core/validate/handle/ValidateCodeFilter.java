@@ -82,6 +82,9 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
             logger.info("校验请求（{}）中的验证码，验证码类型为{}", request.getRequestURI(), type);
 
         }
+
+        // 放行
+        filterChain.doFilter(request, response);
     }
 
     protected void addUrlToMap(String urlString, ValidateCodeType type) {

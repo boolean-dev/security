@@ -13,8 +13,8 @@ import java.util.Collection;
  **/
 public class SmsCodeAuthenticationToken extends UsernamePasswordAuthenticationToken {
 
-    public SmsCodeAuthenticationToken(Object principal) {
-        super(principal, null);
+    public SmsCodeAuthenticationToken(Object mobile) {
+        super(mobile, null);
     }
     public SmsCodeAuthenticationToken(Object principal, Object credentials) {
         super(principal, credentials);

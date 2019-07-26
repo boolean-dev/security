@@ -4,8 +4,6 @@ import com.tao.security.core.validate.ValidateCode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.awt.image.BufferedImage;
-import java.time.LocalDateTime;
 
 /**
  * @ClassName SmsValidateCode
@@ -18,10 +16,10 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 public class SmsValidateCode extends ValidateCode{
 
-    private String phone;
+    private String mobile;
 
     public SmsValidateCode(String code, long expireIn, String phone) {
         super(code, expireIn);
-        this.phone = phone;
+        this.mobile = phone;
     }
 }

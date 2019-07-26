@@ -40,7 +40,7 @@ public abstract class AbstractValidateCodeProcessor<C extends ValidateCode> impl
     public void create(ServletWebRequest request) throws Exception {
         C validateCode = this.generate(request);
         this.save(request, validateCode);
-
+        this.send(request, validateCode);
     }
 
     @Override
@@ -100,7 +100,7 @@ public abstract class AbstractValidateCodeProcessor<C extends ValidateCode> impl
     @SuppressWarnings("unchecked")
     private C generate(ServletWebRequest request) {
         ValidateCodeType type = this.getValidateCodeType(request);
-        String generateName = type + ValidateCodeGenerator.class.getSimpleName();
+        String generateName = type.name().toLowerCase() + ValidateCodeGenerator.class.getSimpleName();
         ValidateCodeGenerator validateCodeGenerator = validateCodeGenerators.get(generateName);
         if (validateCodeGenerator == null) {
             throw new ValidateCodeException("验证码生成器" + generateName + "不存在");

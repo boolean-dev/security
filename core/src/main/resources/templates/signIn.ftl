@@ -7,7 +7,7 @@
 <body>
 <h2>浏览器登录页</h2>
 <h3>表单登录</h3>
-<form action="/user/login" method="post">
+<form action="/authentication/form" method="post">
     <table>
         <tr>
             <td>用户名:</td>
@@ -21,7 +21,7 @@
             <td>图形验证码:</td>
             <td>
                 <input type="text" name="imageCode">
-                <img src="/user/login/code/image">
+                <img src="/authentication/code/image">
             </td>
         </tr>
         <tr>
@@ -32,17 +32,17 @@
 
 
 <h3>短信登录</h3>
-<form action="/authentication/phone" method="post">
+<form action="/authentication/mobile" method="post">
     <table>
         <tr>
             <td>手机号:</td>
-            <td><input type="text" name="phone" value="1857911****"></td>
+            <td><input type="text" name="mobile" value="1857911****"></td>
         </tr>
         <tr>
             <td>短信验证码:</td>
             <td>
                 <input type="text" name="smsCode">
-                <a href="/user/login/code/sms?phone=1857911****">发送验证码</a>
+                <a href="/authentication/code/sms?mobile=1857911****">发送验证码</a>
             </td>
         </tr>
         <tr>
